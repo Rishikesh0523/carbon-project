@@ -13,7 +13,6 @@ import {
   SystemProgram,
   TransactionInstruction
 } from '@solana/web3.js';
-import { serialize } from 'borsh';
 
 // Your deployed program ID
 export const PROGRAM_ID = new PublicKey('8A6sABcgD2sMgQNWADUH2EakHnTy171tkKD11jPXNHkK');
