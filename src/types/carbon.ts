@@ -1,0 +1,1469 @@
+export type Carbon = {
+  "version": "0.1.0",
+  "name": "carbon",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "verifiers",
+          "type": {
+            "vec": "publicKey"
+          }
+        },
+        {
+          "name": "params",
+          "type": {
+            "defined": "Params"
+          }
+        }
+      ]
+    },
+    {
+      "name": "registerActionType",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "slug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "pointsPerUnit",
+          "type": "u64"
+        },
+        {
+          "name": "unit",
+          "type": "u8"
+        },
+        {
+          "name": "badgeUri",
+          "type": "string"
+        },
+        {
+          "name": "cooldownSecs",
+          "type": "u32"
+        },
+        {
+          "name": "perTxCap",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "join",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "member",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "profileUri",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "submitAction",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "submission",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "slug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "clientNonce",
+          "type": "u64"
+        },
+        {
+          "name": "evidenceHash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "locationHash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "verifyAction",
+      "accounts": [
+        {
+          "name": "verifier",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "submission",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "memberPointsAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "approve",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "redeemWithPartner",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "memberPointsAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "points",
+          "type": "u64"
+        },
+        {
+          "name": "partnerSlug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "setParams",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "Params"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unpause",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "globalState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "pointsMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "vault",
+            "type": "publicKey"
+          },
+          {
+            "name": "verifiers",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "params",
+            "type": {
+              "defined": "Params"
+            }
+          },
+          {
+            "name": "bumpGlobal",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "actionType",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "global",
+            "type": "publicKey"
+          },
+          {
+            "name": "slug",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "pointsPerUnit",
+            "type": "u64"
+          },
+          {
+            "name": "unit",
+            "type": "u8"
+          },
+          {
+            "name": "badgeMetadataUri",
+            "type": "string"
+          },
+          {
+            "name": "cooldownSecs",
+            "type": "u32"
+          },
+          {
+            "name": "perTxCap",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "member",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "joinedAt",
+            "type": "i64"
+          },
+          {
+            "name": "profileUri",
+            "type": {
+              "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "submission",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "member",
+            "type": "publicKey"
+          },
+          {
+            "name": "memberOwner",
+            "type": "publicKey"
+          },
+          {
+            "name": "actionType",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "evidenceHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "locationHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "clientNonce",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Params",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "dailyCap",
+            "type": "u64"
+          },
+          {
+            "name": "perTxCapDefault",
+            "type": "u64"
+          },
+          {
+            "name": "cooldownSecsDefault",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "Initialized",
+      "fields": [
+        {
+          "name": "admin",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "pointsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionSubmitted",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "actionType",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u64",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionApproved",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "actionType",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "points",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "verifier",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionRejected",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "submission",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Redeemed",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "partnerSlug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "points",
+          "type": "u64",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ParamsUpdated",
+      "fields": [
+        {
+          "name": "admin",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Paused",
+      "fields": [
+        {
+          "name": "by",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Unpaused",
+      "fields": [
+        {
+          "name": "by",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Paused",
+      "msg": "Program is paused"
+    },
+    {
+      "code": 6001,
+      "name": "UnauthorizedAdmin",
+      "msg": "Only admin may perform this action"
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedVerifier",
+      "msg": "Verifier not authorized"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAmount",
+      "msg": "Invalid amount"
+    },
+    {
+      "code": 6004,
+      "name": "NotPending",
+      "msg": "Submission is not pending"
+    },
+    {
+      "code": 6005,
+      "name": "MathOverflow",
+      "msg": "Math overflow"
+    },
+    {
+      "code": 6006,
+      "name": "BadMintAuthority",
+      "msg": "Points mint must have Global PDA as mint authority"
+    }
+  ]
+};
+
+export const IDL: Carbon = {
+  "version": "0.1.0",
+  "name": "carbon",
+  "instructions": [
+    {
+      "name": "initialize",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "verifiers",
+          "type": {
+            "vec": "publicKey"
+          }
+        },
+        {
+          "name": "params",
+          "type": {
+            "defined": "Params"
+          }
+        }
+      ]
+    },
+    {
+      "name": "registerActionType",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "slug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "pointsPerUnit",
+          "type": "u64"
+        },
+        {
+          "name": "unit",
+          "type": "u8"
+        },
+        {
+          "name": "badgeUri",
+          "type": "string"
+        },
+        {
+          "name": "cooldownSecs",
+          "type": "u32"
+        },
+        {
+          "name": "perTxCap",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "join",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "member",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "profileUri",
+          "type": {
+            "option": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "submitAction",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "submission",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "slug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        },
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "clientNonce",
+          "type": "u64"
+        },
+        {
+          "name": "evidenceHash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        },
+        {
+          "name": "locationHash",
+          "type": {
+            "array": [
+              "u8",
+              32
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "verifyAction",
+      "accounts": [
+        {
+          "name": "verifier",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "actionType",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "member",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "submission",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "memberPointsAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "approve",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "redeemWithPartner",
+      "accounts": [
+        {
+          "name": "user",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "pointsMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "memberPointsAta",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "points",
+          "type": "u64"
+        },
+        {
+          "name": "partnerSlug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "setParams",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "params",
+          "type": {
+            "defined": "Params"
+          }
+        }
+      ]
+    },
+    {
+      "name": "pause",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "unpause",
+      "accounts": [
+        {
+          "name": "admin",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "global",
+          "isMut": true,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "globalState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "admin",
+            "type": "publicKey"
+          },
+          {
+            "name": "pointsMint",
+            "type": "publicKey"
+          },
+          {
+            "name": "vault",
+            "type": "publicKey"
+          },
+          {
+            "name": "verifiers",
+            "type": {
+              "vec": "publicKey"
+            }
+          },
+          {
+            "name": "params",
+            "type": {
+              "defined": "Params"
+            }
+          },
+          {
+            "name": "bumpGlobal",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "actionType",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "global",
+            "type": "publicKey"
+          },
+          {
+            "name": "slug",
+            "type": {
+              "array": [
+                "u8",
+                16
+              ]
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "pointsPerUnit",
+            "type": "u64"
+          },
+          {
+            "name": "unit",
+            "type": "u8"
+          },
+          {
+            "name": "badgeMetadataUri",
+            "type": "string"
+          },
+          {
+            "name": "cooldownSecs",
+            "type": "u32"
+          },
+          {
+            "name": "perTxCap",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "member",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "publicKey"
+          },
+          {
+            "name": "points",
+            "type": "u64"
+          },
+          {
+            "name": "joinedAt",
+            "type": "i64"
+          },
+          {
+            "name": "profileUri",
+            "type": {
+              "option": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "submission",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "member",
+            "type": "publicKey"
+          },
+          {
+            "name": "memberOwner",
+            "type": "publicKey"
+          },
+          {
+            "name": "actionType",
+            "type": "publicKey"
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "evidenceHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "locationHash",
+            "type": {
+              "array": [
+                "u8",
+                32
+              ]
+            }
+          },
+          {
+            "name": "status",
+            "type": "u8"
+          },
+          {
+            "name": "createdAt",
+            "type": "i64"
+          },
+          {
+            "name": "clientNonce",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "types": [
+    {
+      "name": "Params",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "paused",
+            "type": "bool"
+          },
+          {
+            "name": "dailyCap",
+            "type": "u64"
+          },
+          {
+            "name": "perTxCapDefault",
+            "type": "u64"
+          },
+          {
+            "name": "cooldownSecsDefault",
+            "type": "u32"
+          }
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "Initialized",
+      "fields": [
+        {
+          "name": "admin",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "pointsMint",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionSubmitted",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "actionType",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "amount",
+          "type": "u64",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionApproved",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "actionType",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "points",
+          "type": "u64",
+          "index": false
+        },
+        {
+          "name": "verifier",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ActionRejected",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "submission",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Redeemed",
+      "fields": [
+        {
+          "name": "member",
+          "type": "publicKey",
+          "index": false
+        },
+        {
+          "name": "partnerSlug",
+          "type": {
+            "array": [
+              "u8",
+              16
+            ]
+          },
+          "index": false
+        },
+        {
+          "name": "points",
+          "type": "u64",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "ParamsUpdated",
+      "fields": [
+        {
+          "name": "admin",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Paused",
+      "fields": [
+        {
+          "name": "by",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    },
+    {
+      "name": "Unpaused",
+      "fields": [
+        {
+          "name": "by",
+          "type": "publicKey",
+          "index": false
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Paused",
+      "msg": "Program is paused"
+    },
+    {
+      "code": 6001,
+      "name": "UnauthorizedAdmin",
+      "msg": "Only admin may perform this action"
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedVerifier",
+      "msg": "Verifier not authorized"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidAmount",
+      "msg": "Invalid amount"
+    },
+    {
+      "code": 6004,
+      "name": "NotPending",
+      "msg": "Submission is not pending"
+    },
+    {
+      "code": 6005,
+      "name": "MathOverflow",
+      "msg": "Math overflow"
+    },
+    {
+      "code": 6006,
+      "name": "BadMintAuthority",
+      "msg": "Points mint must have Global PDA as mint authority"
+    }
+  ]
+};

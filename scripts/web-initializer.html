@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Credits Program Initializer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+        
+        textarea {
+            height: 120px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .button {
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .button:hover {
+            background: #1d4ed8;
+        }
+        
+        .button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        
+        .log {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .success { color: #10b981; }
+        .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        .info { color: #3b82f6; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .wallet-info {
+            background: #f3f4f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .network-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .network-option {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .network-option.active {
+            border-color: #2563eb;
+            background: #eff6ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 Carbon Credits Program Initializer</h1>
+            <p>Initialize your Solana carbon credits program with ease</p>
+        </div>
+        
+        <div class="network-selector">
+            <div class="network-option active" onclick="selectNetwork('devnet')">
+                <strong>Devnet</strong><br>
+                <small>For testing</small>
+            </div>
+            <div class="network-option" onclick="selectNetwork('mainnet-beta')">
+                <strong>Mainnet</strong><br>
+                <small>Production</small>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div>
+                <div class="form-group">
+                    <label for="programId">Program ID</label>
+                    <input type="text" id="programId" value="8A6sABcgD2sMgQNWADUH2EakHnTy171tkKD11jPXNHkK" placeholder="Your deployed program ID">
+                </div>
+                
+                <div class="form-group">
+                    <label for="privateKey">Admin Private Key (JSON Array)</label>
+                    <textarea id="privateKey" placeholder="[123,45,67,89,101,112,...]"></textarea>
+                    <small style="color: #6b7280;">Enter your wallet's private key as a JSON array of 64 numbers</small>
+                </div>
+            </div>
+            
+            <div>
+                <div class="form-group">
+                    <label for="verifierKeys">Additional Verifiers (Optional)</label>
+                    <textarea id="verifierKeys" placeholder="One public key per line"></textarea>
+                    <small style="color: #6b7280;">Admin wallet is automatically added as a verifier</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dailyCap">Daily Points Cap</label>
+                    <input type="number" id="dailyCap" value="10000" min="1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="perTxCap">Per Transaction Cap</label>
+                    <input type="number" id="perTxCap" value="100" min="1">
+                </div>
+            </div>
+        </div>
+        
+        <div class="wallet-info" id="walletInfo" style="display: none;">
+            <h3>Wallet Information</h3>
+            <div id="walletDetails"></div>
+        </div>
+        
+        <button class="button" onclick="initializeProgram()" id="initButton">
+            🚀 Initialize Program
+        </button>
+        
+        <div class="log" id="log"></div>
+    </div>
+
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+    <script src="https://unpkg.com/@coral-xyz/anchor@latest/dist/browser/index.js"></script>
+    <script src="https://unpkg.com/@solana/spl-token@latest/lib/index.iife.min.js"></script>
+
+    <script>
+        let selectedNetwork = 'devnet';
+        
+        // Inline IDL - no external dependencies
+        const IDL = {
+            "version": "0.1.0",
+            "name": "carbon",
+            "instructions": [
+                {
+                    "name": "initialize",
+                    "accounts": [
+                        { "name": "admin", "isMut": true, "isSigner": true },
+                        { "name": "global", "isMut": true, "isSigner": false },
+                        { "name": "pointsMint", "isMut": true, "isSigner": false },
+                        { "name": "vault", "isMut": true, "isSigner": false },
+                        { "name": "systemProgram", "isMut": false, "isSigner": false },
+                        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+                    ],
+                    "args": [
+                        { "name": "verifiers", "type": { "vec": "publicKey" } },
+                        { "name": "params", "type": { "defined": "Params" } }
+                    ]
+                },
+                {
+                    "name": "registerActionType",
+                    "accounts": [
+                        { "name": "admin", "isMut": true, "isSigner": true },
+                        { "name": "global", "isMut": true, "isSigner": false },
+                        { "name": "actionType", "isMut": true, "isSigner": false },
+                        { "name": "systemProgram", "isMut": false, "isSigner": false }
+                    ],
+                    "args": [
+                        { "name": "slug", "type": { "array": ["u8", 16] } },
+                        { "name": "name", "type": "string" },
+                        { "name": "pointsPerUnit", "type": "u64" },
+                        { "name": "unit", "type": "u8" },
+                        { "name": "badgeUri", "type": "string" },
+                        { "name": "cooldownSecs", "type": "u32" },
+                        { "name": "perTxCap", "type": "u64" }
+                    ]
+                }
+            ],
+            "accounts": [
+                {
+                    "name": "globalState",
+                    "type": {
+                        "kind": "struct",
+                        "fields": [
+                            { "name": "admin", "type": "publicKey" },
+                            { "name": "pointsMint", "type": "publicKey" },
+                            { "name": "vault", "type": "publicKey" },
+                            { "name": "verifiers", "type": { "vec": "publicKey" } },
+                            { "name": "params", "type": { "defined": "Params" } },
+                            { "name": "bumpGlobal", "type": "u8" }
+                        ]
+                    }
+                },
+                {
+                    "name": "actionType",
+                    "type": {
+                        "kind": "struct",
+                        "fields": [
+                            { "name": "global", "type": "publicKey" },
+                            { "name": "slug", "type": { "array": ["u8", 16] } },
+                            { "name": "name", "type": "string" },
+                            { "name": "pointsPerUnit", "type": "u64" },
+                            { "name": "unit", "type": "u8" },
+                            { "name": "badgeMetadataUri", "type": "string" },
+                            { "name": "cooldownSecs", "type": "u32" },
+                            { "name": "perTxCap", "type": "u64" }
+                        ]
+                    }
+                }
+            ],
+            "types": [
+                {
+                    "name": "Params",
+                    "type": {
+                        "kind": "struct",
+                        "fields": [
+                            { "name": "paused", "type": "bool" },
+                            { "name": "dailyCap", "type": "u64" },
+                            { "name": "perTxCapDefault", "type": "u64" },
+                            { "name": "cooldownSecsDefault", "type": "u32" }
+                        ]
+                    }
+                }
+            ],
+            "errors": [
+                { "code": 6000, "name": "Paused", "msg": "Program is paused" },
+                { "code": 6001, "name": "UnauthorizedAdmin", "msg": "Only admin may perform this action" },
+                { "code": 6002, "name": "UnauthorizedVerifier", "msg": "Verifier not authorized" },
+                { "code": 6003, "name": "InvalidAmount", "msg": "Invalid amount" },
+                { "code": 6004, "name": "NotPending", "msg": "Submission is not pending" },
+                { "code": 6005, "name": "MathOverflow", "msg": "Math overflow" },
+                { "code": 6006, "name": "BadMintAuthority", "msg": "Points mint must have Global PDA as mint authority" }
+            ]
+        };
+
+        function selectNetwork(network) {
+            selectedNetwork = network;
+            document.querySelectorAll('.network-option').forEach(el => el.classList.remove('active'));
+            event.target.closest('.network-option').classList.add('active');
+            log(`🌐 Selected network: ${network}`, 'info');
+        }
+
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+            logEl.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function findGlobalPDA(admin, programId) {
+            return solanaWeb3.PublicKey.findProgramAddressSync(
+                [Buffer.from('global'), admin.toBuffer()],
+                programId
+            );
+        }
+
+        function findActionTypePDA(global, slug, programId) {
+            return solanaWeb3.PublicKey.findProgramAddressSync(
+                [Buffer.from('action_type'), global.toBuffer(), Buffer.from(slug)],
+                programId
+            );
+        }
+
+        function stringToSlug(str) {
+            const slug = new Array(16).fill(0);
+            for (let i = 0; i < Math.min(str.length, 16); i++) {
+                slug[i] = str.charCodeAt(i);
+            }
+            return slug;
+        }
+
+        async function validateInputs() {
+            const programId = document.getElementById('programId').value.trim();
+            const privateKey = document.getElementById('privateKey').value.trim();
+            
+            if (!programId) {
+                throw new Error('Program ID is required');
+            }
+            
+            if (!privateKey) {
+                throw new Error('Private key is required');
+            }
+            
+            try {
+                new solanaWeb3.PublicKey(programId);
+            } catch (error) {
+                throw new Error('Invalid Program ID format');
+            }
+            
+            try {
+                const keyArray = JSON.parse(privateKey);
+                if (!Array.isArray(keyArray) || keyArray.length !== 64) {
+                    throw new Error('Private key must be an array of 64 numbers');
+                }
+                return { programId, keyArray };
+            } catch (error) {
+                throw new Error('Invalid private key format. Must be a JSON array of 64 numbers');
+            }
+        }
+
+        async function initializeProgram() {
+            const button = document.getElementById('initButton');
+            button.disabled = true;
+            button.textContent = '🔄 Initializing...';
+            
+            try {
+                log('🚀 Starting Carbon Credits Program initialization...', 'info');
+                
+                // Validate inputs
+                const { programId, keyArray } = await validateInputs();
+                const PROGRAM_ID = new solanaWeb3.PublicKey(programId);
+                
+                // Create keypair from private key
+                const adminKeypair = solanaWeb3.Keypair.fromSecretKey(new Uint8Array(keyArray));
+                log(`👛 Admin wallet: ${adminKeypair.publicKey.toString()}`, 'info');
+                
+                // Show wallet info
+                document.getElementById('walletInfo').style.display = 'block';
+                document.getElementById('walletDetails').innerHTML = `
+                    <strong>Public Key:</strong> ${adminKeypair.publicKey.toString()}<br>
+                    <strong>Network:</strong> ${selectedNetwork}
+                `;
+                
+                // Setup connection
+                const connection = new solanaWeb3.Connection(
+                    solanaWeb3.clusterApiUrl(selectedNetwork),
+                    'confirmed'
+                );
+                
+                // Check balance
+                const balance = await connection.getBalance(adminKeypair.publicKey);
+                log(`💰 Wallet balance: ${balance / 1e9} SOL`, 'info');
+                
+                if (balance < 0.1 * 1e9) {
+                    log('⚠️ Low SOL balance. You may need more SOL for transactions.', 'warning');
+                }
+                
+                // Setup Anchor
+                const wallet = {
+                    publicKey: adminKeypair.publicKey,
+                    signTransaction: async (tx) => {
+                        tx.sign(adminKeypair);
+                        return tx;
+                    },
+                    signAllTransactions: async (txs) => {
+                        return txs.map(tx => {
+                            tx.sign(adminKeypair);
+                            return tx;
+                        });
+                    }
+                };
+                
+                const provider = new anchor.AnchorProvider(connection, wallet, {
+                    commitment: 'confirmed',
+                });
+                
+                const program = new anchor.Program(IDL, PROGRAM_ID, provider);
+                
+                // Find global PDA
+                const [globalPDA] = findGlobalPDA(adminKeypair.publicKey, PROGRAM_ID);
+                log(`🔗 Global PDA: ${globalPDA.toString()}`, 'info');
+                
+                // Check if already initialized
+                try {
+                    const existingGlobal = await program.account.globalState.fetch(globalPDA);
+                    log('✅ Program already initialized!', 'success');
+                    log(`Global state found:`, 'info');
+                    log(`- Admin: ${existingGlobal.admin.toString()}`, 'info');
+                    log(`- Points Mint: ${existingGlobal.pointsMint.toString()}`, 'info');
+                    log(`- Vault: ${existingGlobal.vault.toString()}`, 'info');
+                    log(`- Paused: ${existingGlobal.params.paused}`, 'info');
+                    return;
+                } catch (error) {
+                    log('📝 Program not initialized yet, proceeding...', 'info');
+                }
+                
+                // Create points mint
+                log('🪙 Creating points mint...', 'info');
+                const pointsMint = await splToken.createMint(
+                    connection,
+                    adminKeypair,
+                    globalPDA, // Global PDA will be the mint authority
+                    null, // No freeze authority
+                    6, // 6 decimals
+                    undefined,
+                    { commitment: 'confirmed' },
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                log(`✅ Points mint created: ${pointsMint.toString()}`, 'success');
+                
+                // Create vault account
+                log('🏦 Creating vault account...', 'info');
+                const vaultAccount = await splToken.createAccount(
+                    connection,
+                    adminKeypair,
+                    pointsMint,
+                    globalPDA,
+                    undefined,
+                    { commitment: 'confirmed' },
+                    splToken.TOKEN_PROGRAM_ID
+                );
+                log(`✅ Vault account created: ${vaultAccount.toString()}`, 'success');
+                
+                // Prepare verifiers
+                const verifiers = [adminKeypair.publicKey];
+                const additionalVerifiers = document.getElementById('verifierKeys').value.trim();
+                if (additionalVerifiers) {
+                    const verifierLines = additionalVerifiers.split('\n').filter(line => line.trim());
+                    for (const line of verifierLines) {
+                        try {
+                            verifiers.push(new solanaWeb3.PublicKey(line.trim()));
+                        } catch (error) {
+                            log(`⚠️ Invalid verifier key: ${line}`, 'warning');
+                        }
+                    }
+                }
+                
+                // Prepare params
+                const params = {
+                    paused: false,
+                    dailyCap: new anchor.BN(document.getElementById('dailyCap').value || 10000),
+                    perTxCapDefault: new anchor.BN(document.getElementById('perTxCap').value || 100),
+                    cooldownSecsDefault: 3600,
+                };
+                
+                // Initialize global state
+                log('🔧 Initializing global state...', 'info');
+                const tx = await program.methods
+                    .initialize(verifiers, params)
+                    .accounts({
+                        admin: adminKeypair.publicKey,
+                        global: globalPDA,
+                        pointsMint: pointsMint,
+                        vault: vaultAccount,
+                        systemProgram: solanaWeb3.SystemProgram.programId,
+                        tokenProgram: splToken.TOKEN_PROGRAM_ID,
+                    })
+                    .rpc();
+                
+                log(`✅ Global state initialized! Transaction: ${tx}`, 'success');
+                
+                // Register action types
+                log('📋 Registering action types...', 'info');
+                await registerActionTypes(program, adminKeypair.publicKey, globalPDA, PROGRAM_ID);
+                
+                log('🎉 Program initialization complete!', 'success');
+                log('\n📋 Summary:', 'info');
+                log(`- Network: ${selectedNetwork}`, 'info');
+                log(`- Admin: ${adminKeypair.publicKey.toString()}`, 'info');
+                log(`- Global PDA: ${globalPDA.toString()}`, 'info');
+                log(`- Points Mint: ${pointsMint.toString()}`, 'info');
+                log(`- Vault: ${vaultAccount.toString()}`, 'info');
+                log(`- Verifiers: ${verifiers.length}`, 'info');
+                
+            } catch (error) {
+                log(`❌ Initialization failed: ${error.message}`, 'error');
+                console.error(error);
+            } finally {
+                button.disabled = false;
+                button.textContent = '🚀 Initialize Program';
+            }
+        }
+        
+        async function registerActionTypes(program, admin, globalPDA, PROGRAM_ID) {
+            const actionTypes = [
+                {
+                    slug: 'tree_planting',
+                    name: 'Tree Planting',
+                    pointsPerUnit: 100,
+                    unit: 0,
+                    badgeUri: 'https://example.com/tree-badge',
+                    cooldownSecs: 3600,
+                    perTxCap: 10,
+                }
+            ];
+            
+            for (const actionType of actionTypes) {
+                const slug = stringToSlug(actionType.slug);
+                const [actionTypePDA] = findActionTypePDA(globalPDA, slug, PROGRAM_ID);
+                
+                try {
+                    await program.account.actionType.fetch(actionTypePDA);
+                    log(`✅ Action type '${actionType.name}' already exists`, 'info');
+                    continue;
+                } catch {
+                    // Doesn't exist, create it
+                }
+                
+                try {
+                    const tx = await program.methods
+                        .registerActionType(
+                            slug,
+                            actionType.name,
+                            new anchor.BN(actionType.pointsPerUnit),
+                            actionType.unit,
+                            actionType.badgeUri,
+                            actionType.cooldownSecs,
+                            new anchor.BN(actionType.perTxCap)
+                        )
+                        .accounts({
+                            admin: admin,
+                            global: globalPDA,
+                            actionType: actionTypePDA,
+                            systemProgram: solanaWeb3.SystemProgram.programId,
+                        })
+                        .rpc();
+                    
+                    log(`✅ Registered '${actionType.name}' action type: ${tx}`, 'success');
+                } catch (error) {
+                    log(`❌ Error registering '${actionType.name}': ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // Initialize log
+        log('Welcome to Carbon Credits Program Initializer', 'info');
+        log('Please fill in your details and click Initialize Program', 'info');
+    </script>
+</body>
+</html>
